@@ -80,8 +80,25 @@ nyc_transit =
 
 About this dataset: 
 
-The raw NYC transic dataset contains `r ncol(read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv"))` variables. During the data cleaning process, I first cleaned the variables' names by making them all snake case, then I selected the `r ncol(nyc_transit)` variables of interest: `r colnames(nyc_transit)`, and finally I converted the variable `entry` from character (`YES` vs `NO`) to logical (`TRUE` vs `FALSE`). The resulting dataset has `r ncol(nyc_transit)` variables with dimension `r nrow(nyc_transit)` x `r ncol(nyc_transit)`. Data in this resulting dataset are not tidy. For example, the current 11 route variables can be reduced into one route variable indicating different route numbers. 
+The raw NYC transit dataset contains `r ncol(read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv"))` variables. During the data cleaning process, I first cleaned the variables' names by making them all snake case, then I selected the `r ncol(nyc_transit)` variables of interest: `r colnames(nyc_transit)`, and finally I converted the variable `entry` from character (`YES` vs `NO`) to logical (`TRUE` vs `FALSE`). The resulting dataset has `r ncol(nyc_transit)` variables with dimension `r nrow(nyc_transit)` x `r ncol(nyc_transit)`. Data in this resulting dataset are not tidy. For example, the current 11 route variables can be reduced into one route variable indicating different route numbers. Also, duplicated rows were created from the process of selecting partial columns.  
 
 
+More about the dataset:
 
+```{r}
+nyc_transit_distinct = 
+  nyc_transit %>% 
+  distinct(line, station_name, .keep_all = TRUE)
+
+perct_by_vending = 
+  nyc_transit_distinct %>% 
+  filter(entry == TRUE) %>% 
+  group_by(vending) %>% 
+  summarise(n = n(), .groups = 'drop') %>% 
+  mutate(perct = n/sum(n))
+```
+
+* There are `r nrow(nyc_transit_distinct)` distinct stations. 
+* There are `r sum(pull(nyc_transit_distinct, ada))` stations that are ADA compliant. 
+* `r round(perct_by_vending[1,3],4)*100`% of station entrances / exits without vending allow entrance. 
 
