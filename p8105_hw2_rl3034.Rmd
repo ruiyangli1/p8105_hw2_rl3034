@@ -58,5 +58,10 @@ precip =
 ```
 
 
+About these data: 
+
+For the Mr. Trash Wheel dataset, there are `r ncol(mr_trash_wheel)` variables with `r nrow(mr_trash_wheel)` observations. Variables include: `r colnames(mr_trash_wheel)`. Data on `r length(unique(pull(mr_trash_wheel, dumpster)))` dumpsters were collected from `r min(pull(mr_trash_wheel, year))` to `r max(pull(mr_trash_wheel, year))`. The total weight of trash is `r sum(pull(mr_trash_wheel, weight_tons))` tons. These trash was incinerated to provide electricity for `r format(round(sum(pull(mr_trash_wheel, homes_powered)), 0), scientific = F)` Maryland homes. The median number of sports balls in a dumpster is `r median(pull(mr_trash_wheel, sports_balls))`.
+
+For the combined precipitation dataset, there are `r ncol(precip)` variables with `r nrow(precip)` observations. Variables include: `r colnames(precip)`. For example, the total precipitation in 2018 was `r sum(pull(precip_2018, total))` (in). 
 
 
