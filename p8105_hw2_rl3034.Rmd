@@ -65,3 +65,16 @@ For the Mr. Trash Wheel dataset, there are `r ncol(mr_trash_wheel)` variables wi
 For the combined precipitation dataset, there are `r ncol(precip)` variables with `r nrow(precip)` observations. Variables include: `r colnames(precip)`. For example, the total precipitation in 2018 was `r sum(pull(precip_2018, total))` (in). 
 
 
+
+## Problem 2 
+
+Read and clean the nyc transit data: 
+
+```{r}
+nyc_transit = 
+  read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
+  janitor::clean_names() %>% 
+  select(line:route11, entry, vending, entrance_type, ada) %>% 
+  mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
+```
+
