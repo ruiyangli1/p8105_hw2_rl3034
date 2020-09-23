@@ -78,3 +78,10 @@ nyc_transit =
   mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
 
+About this dataset: 
+
+The raw NYC transic dataset contains `r ncol(read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv"))` variables. During the data cleaning process, I first cleaned the variables' names by making them all snake case, then I selected the `r ncol(nyc_transit)` variables of interest: `r colnames(nyc_transit)`, and finally I converted the variable `entry` from character (`YES` vs `NO`) to logical (`TRUE` vs `FALSE`). The resulting dataset has `r ncol(nyc_transit)` variables with dimension `r nrow(nyc_transit)` x `r ncol(nyc_transit)`. Data in this resulting dataset are not tidy. For example, the current 11 route variables can be reduced into one route variable indicating different route numbers. 
+
+
+
+
