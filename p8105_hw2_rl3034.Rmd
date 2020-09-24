@@ -178,5 +178,21 @@ merge_df = left_join(merge_df, unemployment, by = c("year", "month"))
 ```
 
 
+About these datasets:
+
+
+The file “pols” contains `r nrow(pols)` observations of `r ncol(pols)` variables (`r colnames(pols)`) related to the number of national politicians who are democratic or republican at any given time. 
+
+The file “snp” contains `r nrow(snp)` observations of `r ncol(snp)` variables (`r colnames(snp)`) related to Standard & Poor’s stock market index (S&P), often used as a representative measure of stock market as a whole. 
+
+The file “unemployment” contains `r nrow(unemployment)` observations of `r ncol(unemployment)` variables (`r colnames(unemployment)`). 
+
+The merged dataset has dimension `r nrow(merge_df)`x`r ncol(merge_df)`. Data was collected from year `r min(pull(merge_df, year))` to `r max(pull(merge_df, year))`. Key variables in this dataset includes: 
+
+* `prez`: indicator of whether the president was republican or democratic or other at the associated time
+* `close`: the closing values of the S&P stock index at the associated time
+* `unemployment`: percentage of unemployment at the associated time
+
+
 
 
