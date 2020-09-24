@@ -15,7 +15,7 @@ library(tidyverse)
 
 Read and clean the Mr. Trash Wheel sheet:
 
-```{r}
+```{r trash_wheel_df}
 mr_trash_wheel = 
   read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", 
              sheet = "Mr. Trash Wheel", 
@@ -31,7 +31,7 @@ mr_trash_wheel =
 
 Read and clean precipitation data for 2017 and 2018:
 
-```{r}
+```{r precip_2017_2018_df}
 precip_2017 = 
   read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", 
              sheet = "2017 Precipitation",
@@ -51,7 +51,7 @@ precip_2018 =
 
 Combine precipitation datasets:
 
-```{r}
+```{r precip_rowbind}
 precip = 
   bind_rows(precip_2017, precip_2018) %>% 
   mutate(month = month.name[month])
@@ -70,7 +70,7 @@ For the combined precipitation dataset, there are `r ncol(precip)` variables wit
 
 Read and clean the nyc transit data: 
 
-```{r}
+```{r nyc_transit_df}
 nyc_transit = 
   read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
   janitor::clean_names() %>% 
@@ -85,7 +85,7 @@ The raw NYC transit dataset contains `r ncol(read_csv(file = "./data/NYC_Transit
 
 More about the dataset:
 
-```{r}
+```{r nyc_transit_ops}
 nyc_transit_distinct = 
   nyc_transit %>% 
   distinct(line, station_name, .keep_all = TRUE)
@@ -105,7 +105,7 @@ perct_by_vending =
 
 Reformat data so that route number and route name are distinct variables: 
 
-```{r}
+```{r nyc_transit_reformat}
 nyc_transit_reformat = 
   nyc_transit_distinct %>% 
   mutate_at(vars(route8:route11), as.character) %>% 
@@ -130,7 +130,7 @@ nyc_transit_a =
 
 Clean pols-month.csv: 
 
-```{r}
+```{r pols_df}
 pols = 
   read_csv("./data/pols-month.csv") %>% 
   separate(mon, into = c("year", "month", "day"), sep = "-") %>% 
@@ -143,7 +143,7 @@ pols =
 
 Clean snp.csv: 
 
-```{r}
+```{r snp_df}
 snp = 
   read_csv("./data/snp.csv") %>% 
   separate(date, into = c("month", "day", "year"), sep = "/") %>% 
@@ -154,7 +154,7 @@ snp =
 
 Tidy unemployment.csv: 
 
-```{r}
+```{r unemp_df}
 unemployment = 
   read_csv("./data/unemployment.csv") %>% 
   pivot_longer(
@@ -171,7 +171,7 @@ unemployment =
 
 Merge snp into pols, and merge unemployment into the result: 
 
-```{r}
+```{r merge_pols_snp_unemp}
 merge_df = left_join(pols, snp, by = c("year", "month"))
 
 merge_df = left_join(merge_df, unemployment, by = c("year", "month"))
