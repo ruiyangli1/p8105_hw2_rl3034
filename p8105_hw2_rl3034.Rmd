@@ -89,22 +89,15 @@ The raw NYC transit dataset contains `r ncol(read_csv(file = "./data/NYC_Transit
 
 More about the dataset:
 
-```{r nyc_transit_ops}
+```{r nyc_transit_distinct}
 nyc_transit_distinct = 
   nyc_transit %>% 
   distinct(line, station_name, .keep_all = TRUE)
-
-perct_by_vending = 
-  nyc_transit_distinct %>% 
-  filter(entry == TRUE) %>% 
-  group_by(vending) %>% 
-  summarise(n = n(), .groups = 'drop') %>% 
-  mutate(perct = n/sum(n)) 
 ```
 
 * There are `r nrow(nyc_transit_distinct)` distinct stations. 
 * There are `r sum(pull(nyc_transit_distinct, ada))` stations that are ADA compliant. 
-* `r round(perct_by_vending[1,3],4)*100`% of station entrances / exits without vending allow entrance. 
+* `r round(nrow(nyc_transit %>% filter(vending == "NO" & entry == TRUE ))/nrow(nyc_transit %>% filter(vending == "NO"))*100, 2)`% of station entrances / exits without vending allow entrance. 
 
 
 Reformat data so that route number and route name are distinct variables: 
@@ -115,13 +108,13 @@ nyc_transit_reformat =
   mutate_at(vars(route8:route11), as.character) %>% 
   pivot_longer(
     route1:route11,
-    names_to = "route_number",
+    names_to = "route_name",
     names_prefix = "route",
-    values_to = "route_name")
+    values_to = "route_number")
 
 nyc_transit_a = 
   nyc_transit_reformat %>% 
-  filter(route_name == "A") %>% 
+  filter(route_number == "A") %>% 
   distinct(line, station_name, .keep_all = TRUE)
 ```
 
@@ -140,7 +133,7 @@ pols =
   separate(mon, into = c("year", "month", "day"), sep = "-") %>% 
   mutate(
     month = month.name[as.numeric(month)], 
-    prez = ifelse(prez_dem == 1, "dem", ifelse(prez_gop == 1, "gop", "other"))
+    president = ifelse(prez_dem == 1, "dem", ifelse(prez_gop == 1, "gop", "other"))
   ) %>% 
   select(-prez_dem, -prez_gop, -day)
 ```
@@ -193,7 +186,7 @@ The file “unemployment” contains `r nrow(unemployment)` observations of `r n
 
 The merged dataset has dimension `r nrow(merge_df)`x`r ncol(merge_df)`. Data was collected from year `r min(pull(merge_df, year))` to `r max(pull(merge_df, year))`. Key variables in this dataset includes: 
 
-* `prez`: indicator of whether the president was republican or democratic or other at the associated time
+* `president`: indicator of whether the president was republican or democratic or other at the associated time
 * `close`: the closing values of the S&P stock index at the associated time
 * `unemployment`: percentage of unemployment at the associated time
 
